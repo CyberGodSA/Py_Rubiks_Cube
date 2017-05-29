@@ -22,7 +22,6 @@ def _random(C, a):
 
 
 class Cube:
-    # define colors
     main_color = 'black'
     face_colors = ["w", "#ffde24",
                    "#0000b3", "#009f0f",
@@ -59,7 +58,6 @@ class Cube:
     rots = [Quaternion.from_v_theta(([1., 0., 0.]), theta) for theta in (np.pi / 2, -np.pi / 2)]
     rots += [Quaternion.from_v_theta(([0., 1., 0.]), theta) for theta in (np.pi / 2, -np.pi / 2, np.pi, 2 * np.pi)]
 
-    # face movements
     faces_dict = dict(F=z, B=-z,
                       R=x, L=-x,
                       U=y, D=-y)
@@ -73,7 +71,7 @@ class Cube:
         self._initialize_arrays()
 
     def _initialize_arrays(self):
-        # initialize centroids for stickers and faces, faces, and stickers\
+        # initialize centroids for stickers and faces, faces, and stickers
 
         # n**2 translations for each face of the cube
         cubik_width = 2. / self.n
@@ -82,7 +80,6 @@ class Cube:
                                  for i in range(self.n)
                                  for j in range(self.n)])
 
-        # arrays for centroids, faces, stickers, and colors
         face_centroids = []
         faces = []
         sticker_centroids = []
@@ -124,7 +121,6 @@ class Cube:
 
     def _sort_faces(self):
         # put faces in a standard order using np.lexsort
-
         # https://docs.scipy.org/doc/numpy/reference/generated/numpy.lexsort.html
         ind = np.lexsort(self._face_centroids.T)
 
@@ -135,7 +131,6 @@ class Cube:
         self._faces = self._faces[ind]
 
     def rotate_face(self, f, n=1, layer=0):
-        # rotate face
         try:
             f_last, n_last, layer_last = self._move_list[-1]
         except:
@@ -195,7 +190,7 @@ class Interactive_Cube(Axes):
         callbacks = fig.canvas.callbacks.callbacks
         del callbacks['key_press_event']
 
-        # add some defaults, and draw axes
+        # add defaults, draw axes
         kwargs.update(dict(aspect=kwargs.get('aspect', 'equal'),
                            xlim=kwargs.get('xlim', (-2.0, 2.0)),
                            ylim=kwargs.get('ylim', (-2.0, 2.0)),
@@ -209,17 +204,16 @@ class Interactive_Cube(Axes):
         self._start_xlim = kwargs['xlim']
         self._start_ylim = kwargs['ylim']
 
-        # define movement for up/down arrows or up/down mouse movement
+        # define movement for up/down
         self._ax_UD = (1, 0, 0)
         self._step_UD = 0.01
 
-        # define movement for left/right arrows or left/right mouse movement
+        # define movement for left/right
         self._ax_LR = (0, -1, 0)
         self._step_LR = 0.01
 
         self._ax_LR_alt = (0, 0, 1)
 
-        # internal state variable
         self._active = False  # true when mouse is over axes
         self._button1 = False  # true when button 1 is pressed
         self._button2 = False  # true when button 2 is pressed
@@ -233,7 +227,7 @@ class Interactive_Cube(Axes):
 
         self._draw_cube()
 
-        # connect some GUI events
+        # connect GUI events
         self.figure.canvas.mpl_connect('button_press_event',
                                        self._mouse_press)
         self.figure.canvas.mpl_connect('button_release_event',
@@ -248,8 +242,7 @@ class Interactive_Cube(Axes):
         self._initialize_widgets()
 
     def _initialize_widgets(self):
-        # create button
-
+        # create  "Solve"
         self._ax_solve = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
         self._btn_solve = Button(self._ax_solve, 'Solve')
         self._btn_solve.on_clicked(self._solve_cube)
@@ -268,7 +261,7 @@ class Interactive_Cube(Axes):
         sticker_zorders = -sticker_centroids[:, 2]
 
         if self._face_polys is None:
-            # initial call: create polygon objects and add to axes
+            # create polygon objects and add to axes
             self._face_polys = []
             self._sticker_polys = []
 
@@ -283,7 +276,7 @@ class Interactive_Cube(Axes):
                 self.add_patch(fp)
                 self.add_patch(sp)
         else:
-            # subsequent call: update the polygon objects
+            # update the polygon objects
             for i in range(len(colors)):
                 self._face_polys[i].set_xy(faces[i])
                 self._face_polys[i].set_zorder(face_zorders[i])
@@ -313,7 +306,6 @@ class Interactive_Cube(Axes):
         self.cube._move_list = []
 
     def _key_press(self, event):
-        # key press events
         if event.key == 'shift':
             self._shift = True
         elif event.key.isdigit():
@@ -353,14 +345,12 @@ class Interactive_Cube(Axes):
         self._draw_cube()
 
     def _key_release(self, event):
-        # key release event
         if event.key == 'shift':
             self._shift = False
         elif event.key.isdigit():
             self._digit_flags[int(event.key)] = 0
 
     def _mouse_press(self, event):
-        # mouse button press
         self._event_xy = (event.x, event.y)
         if event.button == 1:
             self._button1 = True
@@ -368,7 +358,6 @@ class Interactive_Cube(Axes):
             self._button2 = True
 
     def _mouse_release(self, event):
-        # mouse button release
         self._event_xy = None
         if event.button == 1:
             self._button1 = False
@@ -376,7 +365,6 @@ class Interactive_Cube(Axes):
             self._button2 = False
 
     def _mouse_motion(self, event):
-        # mouse motion
         if self._button1 or self._button2:
             dx = event.x - self._event_xy[0]
             dy = event.y - self._event_xy[1]
@@ -416,6 +404,6 @@ if __name__ == '__main__':
         a = 25
 
     cube = Cube(N)
-    #_random(cube, a)
+    _random(cube, a)
     cube.draw_interactive()
     plt.show()
