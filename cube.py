@@ -73,7 +73,7 @@ class Cube:
         self._initialize_arrays()
 
     def _initialize_arrays(self):
-        # initialize centroids, faces, and stickers
+        # initialize centroids for stickers and faces, faces, and stickers
         # start with a base for each one, then translate and rotate them into position
 
         # n**2 translations for each face of the cube

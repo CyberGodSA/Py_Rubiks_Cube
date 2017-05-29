@@ -28,11 +28,11 @@ def project_points(points, q, view, vertical=[0, 1, 0]):
     Rpts = np.dot(points, R.T)
 
     # project the points onto the view
-    dpoint = Rpts - view
-    dpoint_view = np.dot(dpoint, view).reshape(dpoint.shape[:-1] + (1,))
-    dproj = -dpoint * v2 / dpoint_view
+    d_point = Rpts - view
+    d_point_view = np.dot(d_point, view).reshape(d_point.shape[:-1] + (1,))
+    d_proj = -d_point * v2 / d_point_view
 
-    trans = [i for i in range(1, dproj.ndim)] + [0]
-    return np.array([np.dot(dproj, x_dir),
-                     np.dot(dproj, y_dir),
-                     -np.dot(dpoint, z_dir)]).transpose(trans)
+    trans = [i for i in range(1, d_proj.ndim)] + [0]
+    return np.array([np.dot(d_proj, x_dir),
+                     np.dot(d_proj, y_dir),
+                     -np.dot(d_point, z_dir)]).transpose(trans)

@@ -3,7 +3,7 @@ import numpy as np
 
 class Quaternion:
     # Quaternion Rotation
-    # http://gala-astro.readthedocs.io/en/latest/api/gala.coordinates.Quaternion.html
+    # get from http://gala-astro.readthedocs.io/en/latest/api/gala.coordinates.Quaternion.html
     def __init__(self, x):
         self.x = np.asarray(x, dtype=float)
 
