@@ -11,7 +11,7 @@ from quaternion import Quaternion
 from projection import project_points
 
 
-# from interaction_with_cube import InteractiveCube
+# from interaction_with_cube import Interactive_Cube
 
 def _random(C, a):
     # a random moves for cube C
@@ -73,8 +73,7 @@ class Cube:
         self._initialize_arrays()
 
     def _initialize_arrays(self):
-        # initialize centroids for stickers and faces, faces, and stickers
-        # start with a base for each one, then translate and rotate them into position
+        # initialize centroids for stickers and faces, faces, and stickers\
 
         # n**2 translations for each face of the cube
         cubik_width = 2. / self.n
@@ -125,6 +124,7 @@ class Cube:
 
     def _sort_faces(self):
         # put faces in a standard order using np.lexsort
+
         # https://docs.scipy.org/doc/numpy/reference/generated/numpy.lexsort.html
         ind = np.lexsort(self._face_centroids.T)
 
@@ -209,17 +209,17 @@ class Interactive_Cube(Axes):
         self._start_xlim = kwargs['xlim']
         self._start_ylim = kwargs['ylim']
 
-        # Define movement for up/down arrows or up/down mouse movement
+        # define movement for up/down arrows or up/down mouse movement
         self._ax_UD = (1, 0, 0)
         self._step_UD = 0.01
 
-        # Define movement for left/right arrows or left/right mouse movement
+        # define movement for left/right arrows or left/right mouse movement
         self._ax_LR = (0, -1, 0)
         self._step_LR = 0.01
 
         self._ax_LR_alt = (0, 0, 1)
 
-        # Internal state variable
+        # internal state variable
         self._active = False  # true when mouse is over axes
         self._button1 = False  # true when button 1 is pressed
         self._button2 = False  # true when button 2 is pressed
@@ -416,6 +416,6 @@ if __name__ == '__main__':
         a = 25
 
     cube = Cube(N)
-    _random(cube, a)
+    #_random(cube, a)
     cube.draw_interactive()
     plt.show()
