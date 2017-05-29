@@ -13,6 +13,10 @@ from projection import project_points
 
 # from interaction_with_cube import Interactive_Cube
 
+"""TODO:
+    1. реализовать "нормальный" алгоритм решения, либо же подключить модуль pycube для решения
+    2. сделать вывод конфигурации кубика в .txt файл"""
+
 def _random(C, a):
     # a random moves for cube C
     moves = ['U', 'D', 'R', 'L', 'F', 'B']
