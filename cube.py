@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+import random
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,16 +9,27 @@ from matplotlib.widgets import Button
 
 from quaternion import Quaternion
 from projection import project_points
+
+
 # from interaction_with_cube import InteractiveCube
+
+def _random(C, a):
+    # a random moves for cube C
+    moves = ['U', 'D', 'R', 'L', 'F', 'B']
+    direction = [1, -1]
+    for i in range(1, a + 1):
+        C.rotate_face(random.choice(moves), random.choice(direction))
 
 
 class Cube:
+    # define colors
     main_color = 'black'
     face_colors = ["w", "#ffde24",
                    "#0000b3", "#009f0f",
                    "#ff8214", "#e00000",
                    "gray", "none"]
 
+    # define size of stickers
     sticker_width = 0.88
     sticker_edge = 0.5 * (1. - sticker_width)
     sticker_thickness = 0.01
@@ -163,6 +175,7 @@ class Cube:
 
 
 class Interactive_Cube(Axes):
+    #
     def __init__(self, cube=None, view=(0, 0, 10), fig=None, rect=[0, 0.16, 1, 0.84], **kwargs):
         if cube is None:
             self.cube = Cube(3)
@@ -234,17 +247,8 @@ class Interactive_Cube(Axes):
 
         self._initialize_widgets()
 
-        """self.figure.text(0.05, 0.05,
-                         "Mouse/arrow keys adjust view\n"
-                         "U/D/L/R/B/F keys turn faces\n"
-                         "(hold shift for counter-clockwise)",
-                         size=10)"""
-
     def _initialize_widgets(self):
         # create button
-        """self._ax_reset = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
-        self._btn_reset = Button(self._ax_reset, 'Reset View')
-        self._btn_reset.on_clicked(self._reset_view)"""
 
         self._ax_solve = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
         self._btn_solve = Button(self._ax_solve, 'Solve')
@@ -300,12 +304,6 @@ class Interactive_Cube(Axes):
                 self.cube.rotate_face(face, turns * 1. / steps,
                                       layer=layer)
                 self._draw_cube()
-
-    """def _reset_view(self, *args):
-        self.set_xlim(self._start_xlim)
-        self.set_ylim(self._start_ylim)
-        self._current_rot = self._start_rot
-        self._draw_cube()"""
 
     def _solve_cube(self, *args):
         move_list = self.cube._move_list[:]
@@ -412,7 +410,12 @@ if __name__ == '__main__':
         N = int(sys.argv[1])
     except:
         N = 3
+    try:
+        a = int(sys.argv[2])
+    except:
+        a = 25
 
-    c = Cube(N)
-    c.draw_interactive()
+    cube = Cube(N)
+    _random(cube, a)
+    cube.draw_interactive()
     plt.show()
