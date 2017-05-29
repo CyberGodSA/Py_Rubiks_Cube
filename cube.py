@@ -1,6 +1,6 @@
 import sys
 from time import sleep
-import random
+from random import choice
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,7 +18,7 @@ def _random(C, a):
     moves = ['U', 'D', 'R', 'L', 'F', 'B']
     direction = [1, -1]
     for i in range(1, a + 1):
-        C.rotate_face(random.choice(moves), random.choice(direction))
+        C.rotate_face(choice(moves), choice(direction))
 
 
 class Cube:
@@ -93,7 +93,7 @@ class Cube:
         factor = np.array([1. / self.n, 1. / self.n, 1])
 
         for i in range(6):
-            M = self.rots[i].as_rotation_matrix()
+            M = self.rots[i].rotation_matrix()
             faces_t = np.dot(factor * self.base_face
                              + translations, M.T)
             stickers_t = np.dot(factor * self.base_sticker
@@ -154,7 +154,7 @@ class Cube:
 
         v = self.faces_dict[f]
         r = Quaternion.from_v_theta(v, n * np.pi / 2)
-        M = r.as_rotation_matrix()
+        M = r.rotation_matrix()
 
         proj = np.dot(self._face_centroids[:, :3], v)
         cubie_width = 2. / self.n

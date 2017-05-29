@@ -9,7 +9,7 @@ from quaternion import Quaternion
 from projection import project_points
 from cube import *
 
-
+"""
 class Interactive_Cube(Axes):
     def __init__(self, cube=None,
                  view=(0, 0, 10),
@@ -246,4 +246,4 @@ class Interactive_Cube(Axes):
                 self.set_xlim(factor * xlim[0], factor * xlim[1])
                 self.set_ylim(factor * ylim[0], factor * ylim[1])
 
-                self.figure.canvas.draw()
+                self.figure.canvas.draw()"""

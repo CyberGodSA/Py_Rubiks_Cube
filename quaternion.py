@@ -1,10 +1,9 @@
-# Quaternion Rotation
-# http://gala-astro.readthedocs.io/en/latest/api/gala.coordinates.Quaternion.html
-
 import numpy as np
 
 
 class Quaternion:
+    # Quaternion Rotation
+    # http://gala-astro.readthedocs.io/en/latest/api/gala.coordinates.Quaternion.html
     def __init__(self, x):
         self.x = np.asarray(x, dtype=float)
 
@@ -63,7 +62,7 @@ class Quaternion:
 
         return v, theta
 
-    def as_rotation_matrix(self):
+    def rotation_matrix(self):
         # return the rotation matrix of the (normalized) quaternion
         v, theta = self.v_theta()
 
@@ -86,4 +85,4 @@ class Quaternion:
         return mat.reshape(shape + (3, 3))
 
     def rotate(self, points):
-        return np.dot(points, self.as_rotation_matrix().T)
+        return np.dot(points, self.rotation_matrix().T)
