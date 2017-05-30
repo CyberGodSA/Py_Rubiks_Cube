@@ -7,11 +7,13 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.widgets import Button
 
+import pycuber as pc
+from pycuber.solver import CFOPSolver
+
 from quaternion import Quaternion
 from projection import project_points
 
-from solver import cube_solver
-
+# from solver import cube_solver
 # from interaction_with_cube import Interactive_Cube
 
 """TODO:
@@ -19,17 +21,9 @@ from solver import cube_solver
     2. сделать вывод конфигурации кубика в .txt файл"""
 
 
-def _random(C, a):
-    # a random moves for cube C
-    moves = ['U', 'D', 'R', 'L', 'F', 'B']
-    direction = [1, -1]
-    for i in range(1, a + 1):
-        C.rotate_face(choice(moves), choice(direction))
-
-
 class Cube:
     main_color = 'black'
-    face_colors = ["w", "#ffde24",
+    face_colors = ["#ffde24", "w",
                    "#0000b3", "#009f0f",
                    "#ff8214", "#e00000",
                    "gray", "none"]
@@ -75,6 +69,39 @@ class Cube:
 
         self._move_list = []
         self._initialize_arrays()
+
+    def _random(self, a):
+        # a random moves for cube C
+        moves = ['U', 'D', 'R', 'L', 'F', 'B']
+        direction = [1, -1]
+        for i in range(1, a + 1):
+            self.rotate_face(choice(moves), choice(direction))
+
+    def cube_solver(self):
+        # use CFOP algorithm from pycuber
+        formula = ""
+        moves = self._move_list
+        for i in moves:
+            formula += i[0]
+            if i[1] == -1:
+                formula += "'"
+            elif i[1] == 2:
+                formula += "2"
+            formula += " "
+        c = pc.Cube()
+        my_formula = pc.Formula(formula)
+        c(my_formula)
+        solution = CFOPSolver(c).solve(suppress_progress_messages=True).__str__()
+        move_list = []
+        for i in solution.split(" "):
+            if len(i) == 2:
+                if i[1] == "'":
+                    move_list.append((i[0], -1, 0))
+                elif i[1] == "2":
+                    move_list.append((i[0], 2, 0))
+            else:
+                move_list.append((i[0], 1, 0))
+        return move_list
 
     def _initialize_arrays(self):
         # initialize centroids for stickers and faces, faces, and stickers
@@ -251,7 +278,7 @@ class Interactive_Cube(Axes):
         # create  "Solve"
         self._ax_solve = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
         self._btn_solve = Button(self._ax_solve, 'Solve')
-        self._btn_solve.on_clicked(self._solve_cube)
+        self._btn_solve.on_clicked(self._solve_cube_CFOP)
 
     def _project(self, pts):
         return project_points(pts, self._current_rot, self._view, [0, 1, 0])
@@ -304,12 +331,19 @@ class Interactive_Cube(Axes):
                                       layer=layer)
                 self._draw_cube()
 
+    def _solve_cube_CFOP(self, *args):
+        # move_list = self.cube._move_list[:]
+        move_list = cube.cube_solver()
+        for (face, n, layer) in move_list[::]:
+            self.rotate_face(face, n, layer, steps=3)
+            sleep(0.1)
+        self.cube._move_list = []
+
     def _solve_cube(self, *args):
-        #move_list = self.cube._move_list[:]
-        move_list = cube_solver(cube)
+        move_list = self.cube._move_list[:]
         for (face, n, layer) in move_list[::-1]:
             self.rotate_face(face, -n, layer, steps=3)
-            sleep(0.2)
+            sleep(0.1)
         self.cube._move_list = []
 
     def _key_press(self, event):
@@ -408,9 +442,9 @@ if __name__ == '__main__':
     try:
         a = int(sys.argv[2])
     except:
-        a = 5
+        a = 15
 
     cube = Cube(N)
-    _random(cube, a)
+    cube._random(a)
     cube.draw_interactive()
     plt.show()
