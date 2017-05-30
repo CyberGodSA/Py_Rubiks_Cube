@@ -100,7 +100,10 @@ class Cube:
                 elif i[1] == "2":
                     move_list.append((i[0], 2, 0))
             else:
-                move_list.append((i[0], 1, 0))
+                try:
+                    move_list.append((i[0], 1, 0))
+                except:
+                    break
         return move_list
 
     def _initialize_arrays(self):
@@ -275,10 +278,18 @@ class Interactive_Cube(Axes):
         self._initialize_widgets()
 
     def _initialize_widgets(self):
-        # create  "Solve"
-        self._ax_solve = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
+        # create  buttons
+        self._ax_solve_CFOP = self.figure.add_axes([0.75, 0.05, 0.2, 0.075])
+        self._btn_solve_CFOP = Button(self._ax_solve_CFOP, 'Solve CFOP')
+        self._btn_solve_CFOP.on_clicked(self._solve_cube_CFOP)
+
+        self._ax_solve = self.figure.add_axes([0.5, 0.05, 0.2, 0.075])
         self._btn_solve = Button(self._ax_solve, 'Solve')
-        self._btn_solve.on_clicked(self._solve_cube_CFOP)
+        self._btn_solve.on_clicked(self._solve_cube)
+
+        #self._ax_random = self.figure.add_axes([0.25, 0.05, 0.2, 0.075])
+        #self._btn_random = Button(self._ax_random, 'Rand')
+        #self._btn_random.on_clicked(cube._random(10))
 
     def _project(self, pts):
         return project_points(pts, self._current_rot, self._view, [0, 1, 0])
@@ -332,7 +343,6 @@ class Interactive_Cube(Axes):
                 self._draw_cube()
 
     def _solve_cube_CFOP(self, *args):
-        # move_list = self.cube._move_list[:]
         move_list = cube.cube_solver()
         for (face, n, layer) in move_list[::]:
             self.rotate_face(face, n, layer, steps=3)
