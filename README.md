@@ -16,4 +16,4 @@
 * n - розмірність Кубік Рубіка (за замовченням 3)
 * r - агрумент функції _random для випадкового заплутання Кубік Рубіка (за замовченням 25)
 
-![Иллюстрация к проекту](https://github.com/CyberGodSA/Py_Rubiks_Cube/blob/master/Rubiks_Cube.png)
+![screenshot](https://github.com/CyberGodSA/Py_Rubiks_Cube/blob/master/Rubiks_%D0%A1ube.png)
