@@ -10,12 +10,14 @@ from matplotlib.widgets import Button
 from quaternion import Quaternion
 from projection import project_points
 
+from solver import cube_solver
 
 # from interaction_with_cube import Interactive_Cube
 
 """TODO:
     1. реализовать "нормальный" алгоритм решения, либо же подключить модуль pycube для решения
     2. сделать вывод конфигурации кубика в .txt файл"""
+
 
 def _random(C, a):
     # a random moves for cube C
@@ -303,7 +305,8 @@ class Interactive_Cube(Axes):
                 self._draw_cube()
 
     def _solve_cube(self, *args):
-        move_list = self.cube._move_list[:]
+        #move_list = self.cube._move_list[:]
+        move_list = cube_solver(cube)
         for (face, n, layer) in move_list[::-1]:
             self.rotate_face(face, -n, layer, steps=3)
             sleep(0.2)
@@ -405,7 +408,7 @@ if __name__ == '__main__':
     try:
         a = int(sys.argv[2])
     except:
-        a = 25
+        a = 5
 
     cube = Cube(N)
     _random(cube, a)
